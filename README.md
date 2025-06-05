@@ -62,7 +62,7 @@ Our implementation is mainly based on following repositories. Thanks for their a
 @inproceedings{li2025better,
   title={Better to Teach than to Give: Domain Generalized Semantic Segmentation via Agent Queries with Diffusion Model Guidance},
   author={Li, Fan and Wang, Xuan and Qi, Min and Zhang, Zhaoxiang and Xu, Yuelei},
-  booktitle={Proceedings of the 42st International Conference on Machine Learning},
+  booktitle={International conference on machine learning},
   year={2025}
 }
 ```
