@@ -3,7 +3,7 @@ from typing import Dict, Optional, Union
 
 import numpy as np
 import torch
-from ..third_party.diffusers import (
+from diffusers import (
     AutoencoderKL,
     DDIMScheduler,
     DiffusionPipeline,
