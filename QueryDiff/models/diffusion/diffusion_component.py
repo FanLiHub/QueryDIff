@@ -11,16 +11,16 @@ from ..third_party.diffusers import (
     # LCMScheduler,
     UNet2DConditionModel,
 )
-from ..third_party.diffusers.utils import BaseOutput
+from diffusers.utils import BaseOutput
 from PIL import Image
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.functional import pil_to_tensor, resize
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer, CLIPImageProcessor
-from ..third_party.diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
+from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
 import torch.nn as nn
-from ..third_party.diffusers import DDIMScheduler
+from diffusers import DDIMScheduler
 import random
 import logging
 
