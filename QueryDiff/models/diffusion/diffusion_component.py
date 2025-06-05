@@ -48,29 +48,6 @@ class DiffImgOutput(BaseOutput):
 
 
 class DiffImgPipeline(nn.Module):
-    """
-    function:
-       Ⅰ img->norm_img: img_process_
-       Ⅱ norm_img->latent: norm_img_to_latent
-       Ⅲ latent->norm_img: latent_to_img_tensor
-       Ⅳ norm_img->PIL: img_tensor_to_image
-       Ⅴ seg_gt->norm_seg_gt: seg_gt_process
-       Ⅵ empty_text->embeddings: encode_empty_text
-       Ⅶ text->embeddings: get_text_embedding_
-
-    model:
-    unet (`UNet2DConditionModel`):
-        Conditional U-Net to denoise the depth latent, conditioned on image latent.
-    vae (`AutoencoderKL`):
-        Variational Auto-Encoder (VAE) Model to encode and decode images and depth maps
-        to and from latent representations.
-    scheduler (`DDIMScheduler`):
-        A scheduler to be used in combination with `unet` to denoise the encoded image latents.
-    text_encoder (`CLIPTextModel`):
-        Text-encoder, for empty text embedding.
-    tokenizer (`CLIPTokenizer`):
-        CLIP tokenizer.
-    """
 
     rgb_latent_scale_factor = 0.18215
 
