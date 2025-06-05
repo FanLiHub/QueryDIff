@@ -5,8 +5,8 @@ import math
 import numpy as np
 import torch
 import torch.nn.functional as F
-from ..third_party.diffusers.models.transformer_2d import Transformer2DModelOutput
-from ..third_party.diffusers import DDPMScheduler
+from diffusers.models.transformer_2d import Transformer2DModelOutput
+from diffusers import DDPMScheduler
 from torch.nn import Conv2d
 from torch.nn.parameter import Parameter
 from PIL import Image
@@ -17,7 +17,7 @@ from typing import Dict, Optional, Union
 
 import numpy as np
 import torch
-from ..third_party.diffusers import (
+from diffusers import (
     AutoencoderKL,
     DDIMScheduler,
     DiffusionPipeline,
@@ -25,17 +25,15 @@ from ..third_party.diffusers import (
     # LCMScheduler,
     UNet2DConditionModel,
 )
-from ..third_party.diffusers.utils import BaseOutput
+from diffusers.utils import BaseOutput
 from PIL import Image
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.functional import pil_to_tensor, resize
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer, CLIPImageProcessor
-from ..third_party.diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
+from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
 from .tools import init_block_func, set_timestep, collect_feats
-# from detectron2.config import configurable
-from ..backbone import LoRAReins
 
 def get_tv_resample_method(method_str: str) -> InterpolationMode:
     resample_method_dict = {
@@ -105,60 +103,35 @@ def generate_seed_sequence(
 
 
 class DiffusionTrainer_(nn.Module):
-    '''
-    Args:
-    model_id (str) -> '/datanvme/lf/model/runwayml/stable-diffusion-v1-5' or '/datanvme/lf/model/stable-diffusion-2'
-    mode (str) -> 'down_blocks' or 'up_blocks' or 'mid_block'
-    layer_flag (str) -> 'attentions' or 'resnets'
-    layer_indexes (list): related mode and layer_flag
-    timestep_list (list): min value is 0
-    guidance_scale (int) : 1 denotes standard sampling
-    max_iter (int): controls how many random seeds are generated
-    num_inference_steps (int): controls how many denoising steps are performed
-    data_type (str) -> 'fp32' or 'fp16' or 'bf16'
-    features_flag: collect features (True)
-    hook_flag: register hooks for feature extraction (True)
-    multi_res_noise_flag: add multi-resolution noise (True)
-    strength, annealed, downscale_strategy: related multi_res_noise_flag
-    channel_modific: modify the input layer of unet (True)
-    channel_num (int): collaboration with a
-    seed: random seed
-    low_resources: perform unconditional generation first, then conditional generation (True)
-
-    ---fine----------------------------------------------------------------------
-    q_ada: use rein (True)
-    query_num_layers, query_embed_dims, query_patch_sizes: related q_ada
-    '''
 
     rgb_latent_scale_factor = 0.18215
 
     # @configurable
     def __init__(
             self,
-            model_id='/datanvme/lf/model/runwayml/stable-diffusion-v1-5',
-            layer_flag='resnets',
-            mode='up_blocks',
-            layer_indexes=[[0, 2], [1, 2], [2, 2], [3, 2]],
-            timestep_list=[ 0, ],
-            guidance_scale=1,
-            max_iter=10000,
-            num_inference_steps=50,
-            data_type='fp32',
-            features_flag=False,
-            hook_flag=False,
-            multi_res_noise_flag=False,
-            strength=0.9,
-            annealed=True,
-            downscale_strategy='original',
-            channel_modific=False,
-            channel_num=4,
-            seed=42,
-            low_resources=True,
-            # rein
-            q_ada=False,
-            query_num_layers=[ 2,2,2,1,3,3,3 ],
-            query_embed_dims=[ 320,640,1280,1280,1280,640,320 ],
-            query_patch_sizes=[ 8,16,32,64,32,16,8 ],
+            model_id,
+            layer_flag,
+            mode,
+            layer_indexes,
+            timestep_list,
+            guidance_scale,
+            max_iter,
+            num_inference_steps,
+            data_type,
+            features_flag,
+            hook_flag,
+            multi_res_noise_flag,
+            strength,
+            annealed,
+            downscale_strategy,
+            channel_modific,
+            channel_num,
+            seed,
+            low_resources,
+            q_ada,
+            query_num_layers,
+            query_embed_dims,
+            query_patch_sizes,
     ):
         super().__init__()
         self.seed: Union[int, None] = seed  # used to generate seed sequence, set to `None` to train w/o seeding
@@ -263,10 +236,6 @@ class DiffusionTrainer_(nn.Module):
                 init_block_func(self.diff.unet, 'up', save_hidden=True, reset=True, idxs=self.layer_indexes,
                                 save_timestep=[0], flag_layer='resnet')
 
-            ## ------------------rein------------------ ##
-            self.query_ada: List[LoRAReins] = nn.ModuleList()
-            for ii in range(len(query_patch_sizes[0])):
-                self.query_ada.append(LoRAReins(query_num_layers[0][ii], query_embed_dims[0][ii], query_patch_sizes[0][ii]))
             if q_ada:
                 init_block_func(self.diff.unet, None, save_hidden=True, reset=True, idxs=None,
                                 save_timestep=[0], flag_layer='attention_module_query', adapter_=self.query_ada)
