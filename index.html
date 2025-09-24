@@ -31,6 +31,12 @@
     .publication-authors { margin-top: 0.25rem !important; margin-bottom: 0.25rem !important; }
     .top-hero .hero-body { padding-top: 1.25rem; padding-bottom: 1.25rem; }
     .section.teaser { padding-top: 1rem; padding-bottom: 1rem; }
+    .result-img {
+  width: 280px;   /* 可根据需要调整 */
+  height: auto;
+  display: block;
+  margin: 0.25rem auto;
+}
   </style>
 
 </head>
@@ -103,7 +109,7 @@
   <section class="hero teaser">
     <div class="container is-max-desktop">
       <div class="hero-body" style="padding-bottom: 10px;">
-        <img src="static/images/compa.png" class="center">
+        <img src="static/images/compa.png" class="result-img">
       </div>
     </div>
   </section>
@@ -136,7 +142,7 @@ Notably, it enhances the model's ability to generalize effectively to extreme do
         <div class="column is-four-fifths">
           <h2 class="title is-3">Method</h2>
           <div class="content has-text-centered">
-            <img src="static/images/framework.png" class="center">
+            <img src="static/images/framework.png" class="result-img">
             
             A brief illustration of our proposed framework. First, we use learnable queries to aggregate hierarchical instance features from the segmentation backbone, progressively merging them to form agent queries. Next, we utilize agent queries to learn the scene distribution information embedded in the diffusion features, optimizing their semantic representations through diffusion consistency loss (DCL) that removes visual appearance information irrelevant to the perceptual task from the diffusion features.
     Finally, we use the optimized agent queries to refine the instance features of the segmentation decoder and output the prediction mask.
@@ -152,7 +158,7 @@ Notably, it enhances the model's ability to generalize effectively to extreme do
         <div class="column is-four-fifths">
           <h2 class="title is-3">Qualitative Results</h2>
           <div class="content has-text-centered">
-            <img src="./static/images/qualitatives.png" class="center">
+            <img src="./static/images/qualitatives.png" class="result-img">
             
             Qualitative comparison under G→{C, B, M} generalization setting. From left to right: target image, the visual results predicted by Rein, Ours, and Ground Truth. We deploy the white dash boxes to highlight different prediction parts.
           </div>
@@ -167,8 +173,8 @@ Notably, it enhances the model's ability to generalize effectively to extreme do
   title={Better to Teach than to Give: Domain Generalized Semantic Segmentation via Agent Queries with Diffusion Model Guidance},
   author={Li, Fan and Wang, Xuan and Qi, Min and Zhang, Zhaoxiang and Xu, Yuelei},
   booktitle={Forty-second International Conference on Machine Learning},
-        year={2025}
-      }</code></pre>
+  year={2025}
+  }</code></pre>
     </div>
   </section>
 
