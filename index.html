@@ -25,6 +25,34 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <style>
+    /* Center the hero vertically and horizontally */
+    .hero .hero-body {
+      min-height: 65vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+    }
+    /* Big centered logo */
+    .logo-center {
+      display: block;
+      margin: 0 auto 0.5rem auto;
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+    }
+    /* Center helper for images below */
+    img.center {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -37,8 +65,8 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <h1 class="title is-1 publication-title">
-              <img src="./static/images/Icon.png" width="50" height="50"></img> <span
-                style="color: #FF0078;">Query</span><span style="color: #00509A;">Diff</span>
+              <img src="./static/images/Icon.png" alt="Icon" class="logo-center">
+              <span style="color: #FF0078;">Query</span><span style="color: #00509A;">Diff</span>
             </h1>
 <h1 class="title is-2 publication-title">
   Better to Teach than to Give:<br>Domain Generalized Semantic Segmentation via Agent Queries with Diffusion Model Guidance
